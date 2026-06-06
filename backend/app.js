@@ -49,7 +49,9 @@ app.use(
                 mediaSrc: ["'self'"],
                 frameSrc: ["'none'"],
                 upgradeInsecureRequests:
-                    process.env.DISABLE_HSTS === 'true' ? null : [],
+                    process.env.UPGRADE_INSECURE_REQUESTS === 'true'
+                        ? []
+                        : null,
             },
         },
         hsts:
