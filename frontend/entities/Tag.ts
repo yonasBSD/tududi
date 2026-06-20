@@ -3,4 +3,7 @@ export interface Tag {
     uid?: string;
     name: string;
     tag_type?: 'system' | 'user';
+    pinned?: boolean;
+    color?: string;
+    usage_count?: number;
 }

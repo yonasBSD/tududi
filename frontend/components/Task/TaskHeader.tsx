@@ -35,6 +35,8 @@ interface TaskHeaderProps {
     onDelete?: (e: React.MouseEvent) => void;
     isUpcomingView?: boolean;
     onMenuOpenChange?: (isOpen: boolean) => void;
+    hideStatusControl?: boolean;
+    isKanbanView?: boolean;
 }
 
 const TaskHeader: React.FC<TaskHeaderProps> = ({
@@ -53,6 +55,8 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
     onDelete: _onDelete,
     isUpcomingView = false,
     onMenuOpenChange,
+    hideStatusControl = false,
+    isKanbanView = false,
 }) => {
     const { t } = useTranslation();
     void _onToggleToday;
@@ -183,7 +187,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
             {/* Full view (md and larger) */}
             <div className="hidden md:flex flex-col md:flex-row md:items-center md:relative">
                 <div
-                    className={`flex items-center space-x-3 mb-2 md:mb-0 flex-1 min-w-0 ${!isUpcomingView ? 'pr-56' : ''}`}
+                    className={`flex items-center space-x-3 mb-2 md:mb-0 flex-1 min-w-0 ${!isUpcomingView && !hideStatusControl ? 'pr-56' : ''}`}
                 >
                     <div className="hidden">
                         <TaskPriorityIcon
@@ -249,7 +253,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                                 {task.tags && task.tags.length > 0 && (
                                     <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                                         <TagIcon className="h-3 w-3 mr-1" />
-                                        <span>
+                                        <span className="flex items-center flex-wrap gap-x-1">
                                             {task.tags.map((tag, index) => (
                                                 <React.Fragment key={tag.name}>
                                                     <Link
@@ -276,11 +280,17 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                                                                           ''
                                                                       )}`
                                                         }
-                                                        className="text-gray-500 dark:text-gray-400 hover:underline transition-colors"
+                                                        className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:underline transition-colors"
                                                         onClick={(e) =>
                                                             e.stopPropagation()
                                                         }
                                                     >
+                                                        {tag.color && (
+                                                            <span
+                                                                className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+                                                                style={{ backgroundColor: tag.color }}
+                                                            />
+                                                        )}
                                                         {tag.name}
                                                     </Link>
                                                     {index <
@@ -310,7 +320,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                         )}
                         {/* Project, tags, due date, and recurrence in same row, with spacing when they exist */}
                         {!isUpcomingView && (
-                            <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap overflow-x-auto">
+                            <div className={`flex text-xs text-gray-500 dark:text-gray-400 ${isKanbanView ? 'flex-col space-y-0.5 mt-1.5' : 'items-center gap-3 whitespace-nowrap overflow-x-auto'}`}>
                                 {project && !hideProjectName && (
                                     <div className="flex items-center">
                                         <FolderIcon className="h-3 w-3 mr-1" />
@@ -348,7 +358,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                                 {task.tags && task.tags.length > 0 && (
                                     <div className="flex items-center">
                                         <TagIcon className="h-3 w-3 mr-1" />
-                                        <span>
+                                        <span className="flex items-center flex-wrap gap-x-1">
                                             {task.tags.map((tag, index) => (
                                                 <React.Fragment key={tag.name}>
                                                     <Link
@@ -375,11 +385,17 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                                                                           ''
                                                                       )}`
                                                         }
-                                                        className="text-gray-500 dark:text-gray-400 hover:underline transition-colors"
+                                                        className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:underline transition-colors"
                                                         onClick={(e) =>
                                                             e.stopPropagation()
                                                         }
                                                     >
+                                                        {tag.color && (
+                                                            <span
+                                                                className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+                                                                style={{ backgroundColor: tag.color }}
+                                                            />
+                                                        )}
                                                         {tag.name}
                                                     </Link>
                                                     {index <
@@ -450,7 +466,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                         )}
                     </div>
                 </div>
-                {!isUpcomingView && !task.habit_mode && onToggleCompletion && (
+                {!isUpcomingView && !task.habit_mode && !hideStatusControl && onToggleCompletion && (
                     <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center">
                         <TaskStatusControl
                             task={task}
@@ -533,7 +549,7 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                             {task.tags && task.tags.length > 0 && (
                                 <div className="flex items-center">
                                     <TagIcon className="h-3 w-3 mr-1" />
-                                    <span>
+                                    <span className="flex items-center flex-wrap gap-x-1">
                                         {task.tags.map((tag, index) => (
                                             <React.Fragment key={tag.name}>
                                                 <Link
@@ -560,11 +576,17 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
                                                                       ''
                                                                   )}`
                                                     }
-                                                    className="text-gray-500 dark:text-gray-400 hover:underline transition-colors"
+                                                    className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:underline transition-colors"
                                                     onClick={(e) =>
                                                         e.stopPropagation()
                                                     }
                                                 >
+                                                    {tag.color && (
+                                                        <span
+                                                            className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+                                                            style={{ backgroundColor: tag.color }}
+                                                        />
+                                                    )}
                                                     {tag.name}
                                                 </Link>
                                                 {index <
