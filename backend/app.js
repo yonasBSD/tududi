@@ -143,7 +143,7 @@ app.use((req, res, next) => {
     })(req, res, next);
 });
 
-// RFC 9728 — Protected Resource Metadata (no auth required)
+// RFC 9728 - Protected Resource Metadata (no auth required)
 const oauthRoutes = require('./modules/oauth/routes');
 app.use(oauthRoutes);
 
@@ -235,6 +235,7 @@ const errorHandler = require('./shared/middleware/errorHandler');
 // Modular routes
 const adminModule = require('./modules/admin');
 const areasModule = require('./modules/areas');
+const goalsModule = require('./modules/goals');
 const authModule = require('./modules/auth');
 const backupModule = require('./modules/backup');
 const featureFlagsModule = require('./modules/feature-flags');
@@ -325,6 +326,7 @@ const registerApiRoutes = (basePath) => {
     app.use(basePath, adminModule.routes);
     app.use(basePath, sharesModule.routes);
     app.use(basePath, areasModule.routes);
+    app.use(basePath, goalsModule.routes);
     app.use(basePath, notesModule.routes);
     app.use(basePath, tagsModule.routes);
     app.use(basePath, usersModule.routes);
